@@ -1,19 +1,5 @@
 #!/bin/bash
 
-if [ -z "$1" ]; then
-    TARGETSERVER="127.0.0.1"
-    echo "Target Server not specified, assuming ${TARGETSERVER}..."
-else
-    TARGETSERVER="$1"
-fi
-
-if [ -z "$2" ]; then
-    STREAMID="1234"
-    echo "Target Path not specified, assuming ${STREAMID}..."
-else
-    STREAMID="$1"
-fi
-
 echo Oh 💩 here we go!
 echo View your stream at http://${TARGETSERVER}:8080/ldashplay/${STREAMID}/manifest.mpd
 
@@ -32,9 +18,8 @@ ffmpeg/ffmpeg \
     -g 150 \
     -keyint_min 150 \
     -b:v 4000k \
-    -vf "fps=30,drawtext=fontfile=utils/OpenSans-Bold.ttf:box=1:fontcolor=black:boxcolor=white:fontsize=100':x=40:y=400:textfile=utils/text.txt" \
+    -vf "fps=30,drawtext=fontfile=${UTILS_DIR}/OpenSans-Bold.ttf:box=1:fontcolor=black:boxcolor=white:fontsize=100':x=40:y=400:textfile=${UTILS_DIR}/text.txt" \
     -method PUT \
-    -seg_duration 5 \
     -streaming 1 \
     -http_persistent 1 \
     -utc_timing_url "https://time.akamai.com/?iso" \
@@ -47,4 +32,6 @@ ffmpeg/ffmpeg \
     -remove_at_exit 1 \
     -adaptation_sets "id=0,streams=v id=1,streams=a" \
     -f dash \
-    http://${TARGETSERVER}:8080/ldash/${STREAMID}/manifest.mpd  >/dev/null 2>logs/encode.log &
+    http://${TARGETSERVER}:8080/ldash/${STREAMID}/manifest.mpd 2>&1
+
+    # -seg_duration 5 \
