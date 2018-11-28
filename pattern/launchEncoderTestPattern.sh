@@ -22,7 +22,7 @@ ffmpeg/ffmpeg \
     -method PUT \
     -streaming 1 \
     -http_persistent 1 \
-    -utc_timing_url "https://time.akamai.com/?iso" \
+    -utc_timing_url "https://time-synth.global.ssl.fastly.net/?iso" \
     -index_correction 1 \
     -use_timeline 0 \
     -media_seg_name 'chunk-stream-$RepresentationID$-$Number%05d$.m4s' \
